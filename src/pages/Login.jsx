@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/AuthService.jsx';
+import AuthService from '../services/AuthService.jsx';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -14,7 +14,7 @@ function Login() {
     setLoading(true);
     setError(null);
     try {
-      const res = await login({ username, password });
+      const res = await AuthService.login({ username, password });
       if (res && res.token) {
         navigate('/admin/status');
       } else {
