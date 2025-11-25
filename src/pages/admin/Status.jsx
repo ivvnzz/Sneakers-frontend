@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api';
+import ProductsService from '../../services/ProductsService.jsx';
+import BrandsService from '../../services/BrandsService.jsx';
+import MaterialsService from '../../services/MaterialsService.jsx';
+import ColorsService from '../../services/ColorsService.jsx';
+import GendersService from '../../services/GendersService.jsx';
+import SizesService from '../../services/SizesService.jsx';
+import OriginsService from '../../services/OriginsService.jsx';
 
 function ListSample({ title, items }) {
   return (
@@ -26,13 +32,13 @@ export default function Status() {
     setError(null);
     try {
       const [products, brands, materials, colors, genders, sizes, origins] = await Promise.all([
-        api.getProducts(),
-        api.getBrands(),
-        api.getMaterials(),
-        api.getColors(),
-        api.getGenders(),
-        api.getSizes(),
-        api.getOrigins(),
+        ProductsService.getAll(),
+        BrandsService.getAll(),
+        MaterialsService.getAll(),
+        ColorsService.getAll(),
+        GendersService.getAll(),
+        SizesService.getAll(),
+        OriginsService.getAll(),
       ]);
       setData({
         products: products || [],

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import ProductListTemplate from '../components/templates/ProductListTemplate';
 import productosFemeninoLocal from '../data/productosFemenino.js';
-import api from '../services/api';
+import ProductsService from '../services/ProductsService.jsx';
 
 function Femenino() {
     const [items, setItems] = useState(productosFemeninoLocal);
 
     useEffect(() => {
         let mounted = true;
-        api.getProducts()
+        ProductsService.getAll()
             .then((data) => {
                 if (!mounted) return;
                 if (data && data.length) {
@@ -20,7 +20,6 @@ function Femenino() {
                 }
             })
             .catch(() => {
-                // keep local
             });
         return () => { mounted = false; };
     }, []);

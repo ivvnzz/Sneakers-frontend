@@ -4,7 +4,7 @@ import ProductDetailTemplate from '../components/templates/ProductDetailTemplate
 import products from '../data/products.js';
 import productosFemenino from '../data/productosFemenino.js';
 import productosOF from '../data/productosOF.js';
-import api from '../services/api';
+import ProductsService from '../services/ProductsService.jsx';
 
 function ProductDetail() {
     const { id } = useParams();
@@ -14,15 +14,14 @@ function ProductDetail() {
     useEffect(() => {
         let mounted = true;
         async function load() {
-            // try API first
-            const apiProduct = await api.getProduct(id);
+
+            const apiProduct = await ProductsService.getById(id);
             if (!mounted) return;
             if (apiProduct) {
                 setProduct(apiProduct);
                 return;
             }
 
-            // fallback to local datasets
             let p;
             if (location.pathname.startsWith('/femenino')) {
                 p = productosFemenino.find((x) => x.id === parseInt(id));

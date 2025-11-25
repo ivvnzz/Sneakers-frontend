@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api';
+import BrandsService from '../../services/BrandsService.jsx';
+import MaterialsService from '../../services/MaterialsService.jsx';
+import ColorsService from '../../services/ColorsService.jsx';
+import GendersService from '../../services/GendersService.jsx';
+import SizesService from '../../services/SizesService.jsx';
+import OriginsService from '../../services/OriginsService.jsx';
 
 function ReferenceAdmin({ path, title }) {
   const [items, setItems] = useState([]);
@@ -12,24 +17,13 @@ function ReferenceAdmin({ path, title }) {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.request ? await api.request(path) : null;
-      // fallback: try dedicated endpoints
-      let list = data;
-      if (!list) {
-        // remove leading slash
-        const p = path.startsWith('/') ? path : `/${path}`;
-        const res = await api.request ? await api.request(p) : null;
-        list = res;
-      }
-      // if still empty, try specific getters
-      if (!list) {
-        if (path.includes('brands')) list = await api.getBrands();
-        else if (path.includes('materials')) list = await api.getMaterials();
-        else if (path.includes('colors')) list = await api.getColors();
-        else if (path.includes('genders')) list = await api.getGenders();
-        else if (path.includes('sizes')) list = await api.getSizes();
-        else if (path.includes('origins')) list = await api.getOrigins();
-      }
+      let list = [];
+      if (path.includes('brands')) list = await BrandsService.getAll();
+      else if (path.includes('materials')) list = await MaterialsService.getAll();
+      else if (path.includes('colors')) list = await ColorsService.getAll();
+      else if (path.includes('genders')) list = await GendersService.getAll();
+      else if (path.includes('sizes')) list = await SizesService.getAll();
+      else if (path.includes('origins')) list = await OriginsService.getAll();
       setItems(list || []);
     } catch (err) {
       console.error(err);
@@ -44,25 +38,33 @@ function ReferenceAdmin({ path, title }) {
   async function createItem(e) {
     e.preventDefault();
     const payload = { name, description };
-    const res = await api.createReference(path, payload);
-    if (res) {
+    try {
+      if (path.includes('brands')) await BrandsService.create(payload);
+      else if (path.includes('materials')) await MaterialsService.create(payload);
+      else if (path.includes('colors')) await ColorsService.create(payload);
+      else if (path.includes('genders')) await GendersService.create(payload);
+      else if (path.includes('sizes')) await SizesService.create(payload);
+      else if (path.includes('origins')) await OriginsService.create(payload);
       setName(''); setDescription('');
       load();
-    } else {
+    } catch (err) {
+      console.error(err);
       alert('Error al crear');
     }
   }
 
   async function removeItem(id) {
     if (!confirm('Eliminar?')) return;
-    const p = `${path}/${id}`;
-    const res = await api.deleteReference(p);
-    if (res === null) {
-      // success (204)
+    try {
+      if (path.includes('brands')) await BrandsService.remove(id);
+      else if (path.includes('materials')) await MaterialsService.remove(id);
+      else if (path.includes('colors')) await ColorsService.remove(id);
+      else if (path.includes('genders')) await GendersService.remove(id);
+      else if (path.includes('sizes')) await SizesService.remove(id);
+      else if (path.includes('origins')) await OriginsService.remove(id);
       load();
-    } else if (res) {
-      load();
-    } else {
+    } catch (err) {
+      console.error(err);
       alert('Error al eliminar');
     }
   }

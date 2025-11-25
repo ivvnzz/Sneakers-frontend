@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import BaseTemplate from './BaseTemplate';
 import ProductCard from '../organisms/ProductCard';
 import productosOF from '../../data/productosOF';
-import api from '../../services/api';
+import ProductsService from '../../services/ProductsService.jsx';
 
 function HomeTemplate() {
     const [products, setProducts] = useState(productosOF);
 
     useEffect(() => {
         let mounted = true;
-        api.getProducts()
+        ProductsService.getAll()
             .then((data) => {
                 if (!mounted) return;
                 if (data && data.length) {

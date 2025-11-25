@@ -1,5 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import api from '../services/api';
+import BrandsService from '../services/BrandsService.jsx';
+import MaterialsService from '../services/MaterialsService.jsx';
+import ColorsService from '../services/ColorsService.jsx';
+import GendersService from '../services/GendersService.jsx';
+import SizesService from '../services/SizesService.jsx';
+import OriginsService from '../services/OriginsService.jsx';
 
 // Hook centralizado para cargar y cachear datos de referencia (brands, materials, colors, genders, sizes, origins)
 export default function useReferenceData() {
@@ -17,12 +22,12 @@ export default function useReferenceData() {
     setError(null);
     try {
       const [b, m, c, g, s, o] = await Promise.all([
-        api.getBrands(),
-        api.getMaterials(),
-        api.getColors(),
-        api.getGenders(),
-        api.getSizes(),
-        api.getOrigins(),
+        BrandsService.getAll(),
+        MaterialsService.getAll(),
+        ColorsService.getAll(),
+        GendersService.getAll(),
+        SizesService.getAll(),
+        OriginsService.getAll(),
       ]);
       setBrands(b || []);
       setMaterials(m || []);

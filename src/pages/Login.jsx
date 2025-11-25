@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api, { setAuthToken } from '../services/api';
+import { login } from '../services/AuthService.jsx';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -14,9 +14,8 @@ function Login() {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.login({ username, password });
+      const res = await login({ username, password });
       if (res && res.token) {
-        setAuthToken(res.token);
         navigate('/admin/status');
       } else {
         setError('Login fallido');
