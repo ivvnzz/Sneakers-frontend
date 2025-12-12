@@ -21,7 +21,6 @@ export default function Moderator() {
         setLoading(true);
         const authToken = AuthService.getAuthToken?.() || '';
         const adminKey = import.meta.env.VITE_ADMIN_KEY || '';
-        // If we're in public demo mode, use the public endpoint; otherwise, prefer the secure one.
         const usePublic = location.pathname && location.pathname.includes('/admin/moderator/public');
         const endpoint = usePublic ? `${API_BASE}/api/sales/tokens` : `${API_BASE}/api/sales/tokens/secure`;
         const res = await fetch(endpoint, {
@@ -113,7 +112,6 @@ export default function Moderator() {
       setEditing(null);
       setSaving(false);
       setView('products');
-      // Reload products by switching view (or re-fetch)
       const reload = await fetch(`${API_BASE}/api/products`);
       if (reload.ok) setProducts(await reload.json());
     } catch (err) {
